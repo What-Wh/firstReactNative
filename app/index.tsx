@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
+import ToDoList from "./components/ToDoList";
 
 export default function Index() {
   const [count, setCount] = useState(0);
@@ -34,11 +35,16 @@ export default function Index() {
   }
 
   return (
+    // <View style={styles.container}>
+    //   <Text>Edit app/index.tsx to edit this screen.</Text>
+    //   <Button title="Press me" onPress={showAlert}/>
+    //   <Button title="Start" onPress={testOnTemper}/>
+    //   <Button title="Show result" onPress={showResult}/>
+    // </View>
+
     <View style={styles.container}>
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-      <Button title="Press me" onPress={showAlert}/>
-      <Button title="Start" onPress={testOnTemper}/>
-      <Button title="Show result" onPress={showResult}/>
+      <ToDoList />
+      {/* <Alerts /> */}
     </View>
   );
 }
