@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { ToDoListModel } from "../models/ToDoListModel";
+import ToDoListItem from "./ToDoListItem";
 
 const api = "https://dummyjson.com/todos";
 
@@ -10,10 +11,7 @@ export default function ToDoList(){
 
     useEffect(() => {
         getTasks();
-        //setTask([...tasks, {todo: "ergesr", id: 1, completed: false, userId: 1 }])
-
-        
-        
+        //setTask([...tasks, {todo: "ergesr", id: 1, completed: false, userId: 1 }])        
     }, []);
 
     const getTasks = async ()=>{
@@ -26,13 +24,19 @@ export default function ToDoList(){
             });
     };
 
+    const deleteProduct = (id: number) => {
+      setTask((prevToDo) =>
+        prevToDo.filter((todo) => todo.id !== id),
+      );
+    };
+
     return(
         <View style={styles.container}>
             <Text style={styles.title}>To-Do List</Text>
             <FlatList
             data={tasks}
             renderItem={({ item }) => (
-              <ProductItem product={item} onDelete={deleteProduct} />
+              <ToDoListItem todo={item} onDelete={deleteProduct} />
             )}
             initialNumToRender={6}
             contentContainerStyle={styles.listContent}
