@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { ToDoListModel } from "../models/ToDoListModel";
+import ToDoForm from "./ToDoForm";
 import ToDoListItem from "./ToDoListItem";
 
 const api = "https://dummyjson.com/todos";
@@ -28,10 +29,15 @@ export default function ToDoList(){
       setTask((prevToDo) =>
         prevToDo.filter((todo) => todo.id !== id),
       );
-    };
+    }; 
+
+    const createToDo = (todo: ToDoListModel) => {
+    setTask((prevToDo) => [todo, ...prevToDo]);
+  };
 
     return(
         <View style={styles.container}>
+            <ToDoForm onCreate={createToDo}/>
             <Text style={styles.title}>To-Do List</Text>
             <FlatList
             data={tasks}

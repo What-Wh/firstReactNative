@@ -1,6 +1,6 @@
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { StyleSheet } from "react-native";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Button, ScrollView, StyleSheet, Text, TextInput } from "react-native";
 import { ToDoListModel } from "../models/ToDoListModel";
 
 
@@ -9,19 +9,98 @@ type Props ={
 };
 
 const ToDoForm: React.FC<Props> = ({ onCreate }) =>{
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<ToDoListModel>();
+  const {
+      control,
+      handleSubmit,
+      formState: { errors },
+  } = useForm<ToDoListModel>();
 
-    const onSubmit: SubmitHandler<ToDoListModel> = (data) =>{
-        data ={
-            ...data,
-            id: Number(data.id),
-            
-        }
-    }
+  const onSubmit: SubmitHandler<ToDoListModel> = (data) =>{
+    data ={
+      ...data,
+        id: Number(data.id),
+      userId: Number(data.userId),
+      completed:
+        String(data.completed).toLowerCase() === "true" ||
+        String(data.completed) === "1",
+    };
+    console.log(data);
+    onCreate(data);
+  }
+
+   return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.heading}>Create New Todo</Text>
+
+      <Text style={styles.label}>ID</Text>
+      <Controller
+        control={control}
+        name="id"
+        rules={{ required: true }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            placeholder="Enter ID"
+            onChangeText={onChange}
+            value={value?.toString() ?? ""}
+          />
+        )}
+      />
+      {errors.id && <Text>This is required.</Text>}
+
+      <Text style={styles.label}>Todo</Text>
+      <Controller
+        control={control}
+        name="todo"
+        rules={{ required: true }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Enter todo"
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+      />
+      {errors.todo && <Text>This is required.</Text>}
+
+      <Text style={styles.label}>Completed</Text>
+      <Controller
+        control={control}
+        name="completed"
+        rules={{ required: true }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="true / false"
+            onChangeText={onChange}
+            value={value?.toString() ?? ""}
+          />
+        )}
+      />
+      {errors.completed && <Text>This is required.</Text>}
+
+      <Text style={styles.label}>User ID</Text>
+      <Controller
+        control={control}
+        name="userId"
+        rules={{ required: true }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            placeholder="Enter User ID"
+            onChangeText={onChange}
+            value={value?.toString() ?? ""}
+          />
+        )}
+      />
+      {errors.userId && <Text>This is required.</Text>}
+
+      <Button title="Create Todo" onPress={handleSubmit(onSubmit)} />
+    </ScrollView>
+  );
 }
 
 export default ToDoForm;
