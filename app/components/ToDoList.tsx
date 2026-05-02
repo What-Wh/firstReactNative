@@ -1,3 +1,4 @@
+import { storage } from "@/services/storage";
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { ToDoListModel } from "../models/ToDoListModel";
@@ -12,7 +13,7 @@ export default function ToDoList(){
 
     useEffect(() => {
         getTasks();
-        //setTask([...tasks, {todo: "ergesr", id: 1, completed: false, userId: 1 }])        
+        
     }, []);
 
     const getTasks = async ()=>{
@@ -23,6 +24,11 @@ export default function ToDoList(){
               console.log(json.todos);
               
             });
+    };
+
+    const loadDataFromStorage = async () =>{
+      let storedToDo = await storage.load<ToDoListModel>("ToDoTasks");
+      setTask(storedToDo);
     };
 
     const deleteProduct = (id: number) => {
