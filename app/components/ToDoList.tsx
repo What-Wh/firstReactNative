@@ -17,18 +17,18 @@ export default function ToDoList(){
     }, []);
 
     const getTasks = async ()=>{
+       let storedToDo = await storage.load<ToDoListModel>("ToDoTasks");
         fetch(api)
             .then((res) => res.json())
             .then((json) => {
-              setTask(json.todos)
-              console.log(json.todos);
+              if (storedToDo !== null) {
+                setTask([storedToDo, ...json.todos]);
+              } else {
+                setTask(json.todos);
+              }
               
             });
-    };
-
-    const loadDataFromStorage = async () =>{
-      let storedToDo = await storage.load<ToDoListModel>("ToDoTasks");
-      setTask(storedToDo);
+        
     };
 
     const deleteProduct = (id: number) => {

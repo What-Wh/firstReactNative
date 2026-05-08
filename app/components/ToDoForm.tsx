@@ -1,3 +1,4 @@
+import { storage } from "@/services/storage";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Button, ScrollView, StyleSheet, Text, TextInput } from "react-native";
@@ -15,7 +16,7 @@ const ToDoForm: React.FC<Props> = ({ onCreate }) =>{
       formState: { errors },
   } = useForm<ToDoListModel>();
 
-  const onSubmit: SubmitHandler<ToDoListModel> = (data) =>{
+  const onSubmit: SubmitHandler<ToDoListModel> = async (data) =>{
     data ={
       ...data,
         id: Number(data.id),
@@ -24,6 +25,7 @@ const ToDoForm: React.FC<Props> = ({ onCreate }) =>{
         String(data.completed).toLowerCase() === "true" ||
         String(data.completed) === "1",
     };
+    await storage.save("ToDoTasks", data)
     console.log(data);
     onCreate(data);
   }
