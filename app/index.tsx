@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import ToDoList from "./components/ToDoList";
+import Database from "./components/ToDoSquiel";
 
 export default function Index() {
   const [count, setCount] = useState(0);
@@ -43,7 +43,8 @@ export default function Index() {
     // </View>
 
     <View style={styles.container}>
-      <ToDoList />
+      <Database/>
+      {/* <ToDoList /> */}
       {/* <Alerts /> */}
     </View>
   );
