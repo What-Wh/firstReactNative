@@ -1,11 +1,11 @@
 import { addItem, deleteItem, getItems } from "@/services/db";
 import React, { useEffect, useState } from "react";
 import {
-    Button,
-    FlatList,
-    StyleSheet, Switch, Text,
-    TextInput,
-    View
+  Button,
+  FlatList,
+  StyleSheet, Switch, Text,
+  TextInput,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ToDoListModel } from "../models/ToDoListModel";
@@ -33,8 +33,7 @@ const Database = () => {
 
     const createdItem = await addItem(newTodo);
 
-    setItems([...items, createdItem]);
-    setTodo("");
+    
   };
 
   const removeItemHandle = async (id: number) => {
