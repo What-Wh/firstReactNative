@@ -1,4 +1,5 @@
 import { addItem, deleteItem, getItems } from "@/services/db";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -10,9 +11,14 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ToDoListModel } from "../models/ToDoListModel";
 
+
 const Database = () => {
   const [items, setItems] = useState<ToDoListModel[]>([]);
   const [todo, setTodo] = useState<string>("");
+
+  const [dueDate, setDueDate] = useState<Date | null>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   useEffect(() => {
     loadItems();
@@ -29,9 +35,13 @@ const Database = () => {
       todo,
       completed: false,
       userId: 1,
+      dueDate: dueDate ? dueDate.toISOString() : null,
     };
 
-    const createdItem = await addItem(newTodo);
+    const createdItem = await addItem(newTodo.todo,
+      newTodo.completed,
+      newTodo.userId,
+      newTodo.dueDate);
 
     
   };
@@ -64,7 +74,63 @@ const Database = () => {
         placeholder="Enter todo..."
       />
 
+      <Button
+        title="Pick Date & Time"
+        onPress={() => setShowDatePicker(true)}
+      />
+
+      {dueDate && (
+        <Text style={{ color: "gray" }}>
+          Selected: {dueDate.toLocaleString()}
+        </Text>
+      )}
+
       <Button title="Add Todo" onPress={addItemHandle} />
+
+        {/* DATE PICKER */}
+      {showDatePicker && (
+        <DateTimePicker
+          value={dueDate ?? new Date()}
+          mode="date"
+          display="default"
+          onChange={(event, date) => {
+            setShowDatePicker(false);
+
+            if (date) {
+              const updated = dueDate ? new Date(dueDate) : new Date();
+              updated.setFullYear(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate()
+              );
+
+              setDueDate(updated);
+              setShowTimePicker(true);
+            }
+          }}
+        />
+      )}
+
+      {/* TIME PICKER */}
+      {showTimePicker && (
+        <DateTimePicker
+          value={dueDate ?? new Date()}
+          mode="time"
+          display="default"
+          onChange={(event, time) => {
+            setShowTimePicker(false);
+
+            if (time) {
+              const updated = dueDate ? new Date(dueDate) : new Date();
+
+              updated.setHours(time.getHours());
+              updated.setMinutes(time.getMinutes());
+
+              setDueDate(updated);
+            }
+          }}
+        />
+      )}
 
       <FlatList
         data={items}
@@ -84,6 +150,11 @@ const Database = () => {
               <Text style={styles.userText}>
                 User ID: {item.userId}
               </Text>
+              {item.dueDate && (
+                <Text style={styles.dueDateText}>
+                  Due: {new Date(item.dueDate).toLocaleString()}
+                </Text>
+              )}
             </View>
 
             <Switch

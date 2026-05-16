@@ -3,4 +3,5 @@ export type ToDoListModel = {
     todo: string;
     completed: boolean;
     userId: number;
+    dueDate?: string | null;
   };
