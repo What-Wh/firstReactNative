@@ -9,7 +9,7 @@ export default function RootLayout() {
     <SQLiteProvider databaseName={DATABASE_NAME} onInit={migrateDbIfNeeded}>
       <Stack>
         <Stack.Screen
-          name="(tabs)"
+          name="components"
           options={{ title: "Home", headerShown: false }}
         ></Stack.Screen>
       </Stack>
