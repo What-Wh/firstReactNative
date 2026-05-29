@@ -1,6 +1,7 @@
 import { addItem, deleteItem, getItems } from "@/services/db";
+import { service } from "@/services/notifications";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   FlatList,
@@ -20,8 +21,9 @@ const Database = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     loadItems();
+    service.setup();
   }, []);
 
   const loadItems = async () => {
@@ -37,6 +39,8 @@ const Database = () => {
       userId: 1,
       dueDate: dueDate ? dueDate.toISOString() : null,
     };
+    await service.notify(dueDate ?? new Date());
+
 
     const createdItem = await addItem(newTodo.todo,
       newTodo.completed,
